@@ -103,27 +103,40 @@ Before modifying any file:
 
 ## Discovery
 
+**Clojure functions**
 ```bash
 brepl <<'EOF'
 (require '[clojure.repl :refer [doc source dir apropos find-doc]])
+(doc map)                        ; function documentation
+(dir clojure.string)             ; list all public vars in a namespace
+(apropos "split")                ; search by name pattern
+(find-doc "regular expression")  ; search docstrings
+(source filter)                  ; read source
+(:arglists (meta #'reduce))      ; check arities
+EOF
+```
 
-; function documentation
-(doc map)
+**Macros**
+```bash
+brepl <<'EOF'
+(macroexpand-1 '(your-macro args))                    ; expand one level
+(macroexpand '(your-macro args))                      ; expand fully
+(clojure.walk/macroexpand-all '(your-macro args))     ; expand all nested forms
+EOF
+```
 
-; list all public vars in a namespace
-(dir clojure.string)
+**Java interop**
+```bash
+brepl <<'EOF'
+(require '[clojure.reflect :as r])
+(r/reflect SomeJavaClass)   ; list all methods and fields
 
-; search by name pattern
-(apropos "split")
-
-; search docstrings
-(find-doc "regular expression")
-
-; read source
-(source filter)
-
-; check arities
-(:arglists (meta #'reduce))
+; filter to just method names
+(->> (r/reflect SomeJavaClass)
+     :members
+     (filter #(instance? clojure.reflect.Method %))
+     (map :name)
+     sort)
 EOF
 ```
 
