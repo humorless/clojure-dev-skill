@@ -7,6 +7,8 @@ When active, Claude will:
 - Evaluate code through the nREPL via `brepl` before writing any file
 - Lint with `clj-kondo` after every save
 - Enforce namespace docstrings and single-responsibility namespaces
+- Prefer functions over macros; require docstrings with usage examples on every macro
+- Define all cross-namespace map shapes as named Malli schemas in `myapp.schema`
 - Follow idiomatic Clojure conventions (threading macros, naming, layout)
 - Run a validation checklist before finalising any code
 
