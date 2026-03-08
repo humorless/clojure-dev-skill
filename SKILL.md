@@ -212,6 +212,27 @@ brepl balance src/myapp/core.clj --dry-run
 
 Supports `.clj`, `.cljs`, `.cljc`, `.bb`, `.edn`.
 
+## Namespace Docstring
+
+Every namespace must have a docstring that describes its single responsibility:
+
+```clojure
+(ns myapp.auth
+  "Handles authentication and session management.")
+```
+
+The docstring must stay consistent with the namespace's actual contents:
+- If you add functions that fall outside the described responsibility, either update the docstring to reflect the broader scope, or extract those functions into a new namespace.
+- A docstring that requires "and" or "or" to describe what the namespace does is a signal to split.
+
+Before saving, verify:
+```bash
+brepl <<'EOF'
+(require '[myapp.auth])
+(:doc (meta (find-ns 'myapp.auth)))
+EOF
+```
+
 ## Validation Checklist
 
 Before saving any code:
@@ -222,6 +243,8 @@ Before saving any code:
 - [ ] Empty collection handled
 - [ ] Edge cases and boundary values covered
 - [ ] Public functions have docstrings
+- [ ] Namespace has a docstring
+- [ ] All functions in the namespace are consistent with the namespace docstring; if not, update the docstring or split the namespace
 - [ ] Naming follows conventions (see `references/idioms.md`)
 - [ ] Lines under 80 characters
 - [ ] Closing parens gathered on single line
