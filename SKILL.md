@@ -212,6 +212,75 @@ brepl balance src/myapp/core.clj --dry-run
 
 Supports `.clj`, `.cljs`, `.cljc`, `.bb`, `.edn`.
 
+## Macro Usage
+
+Prefer functions over macros. Only use macros when evaluation control or
+syntax manipulation is strictly necessary.
+
+Every macro must have a docstring with a usage example:
+
+```clojure
+(defmacro with-db-conn
+  "Opens a database connection and binds it to `conn`.
+   Usage: (with-db-conn [conn db-spec] (query conn ...))"
+  [binding & body] ...)
+```
+
+## Data Shape — Malli Schema
+
+Every map that crosses a namespace boundary must have a named schema.
+
+### Where to define schemas
+
+Define all schemas in a dedicated `myapp.schema` namespace.
+Never define schemas inline at the call site.
+
+```clojure
+(ns myapp.schema
+  "Single source of truth for all cross-namespace data shapes.")
+
+(def User
+  [:map
+   [:id :uuid]
+   [:email :string]
+   [:role [:enum :admin :viewer]]])
+
+(def Order
+  [:map
+   [:id :uuid]
+   [:user-id :uuid]
+   [:items [:vector :uuid]]])
+```
+
+### Validation at namespace boundaries
+
+Validate at the entry point of a namespace, not deep inside.
+Use `ex-info` with `malli.error/humanize` for actionable error messages:
+
+```clojure
+(ns myapp.order
+  (:require [malli.core :as m]
+            [malli.error :as me]
+            [myapp.schema :as schema]))
+
+(defn create-order [order]
+  (when-not (m/validate schema/Order order)
+    (throw (ex-info "Invalid order shape"
+                    {:error (me/humanize (m/explain schema/Order order))
+                     :input order})))
+  ...)
+```
+
+### Claude workflow for data shapes
+
+Before writing any function that accepts or returns a map:
+
+1. Check `myapp.schema` — does a schema exist for this shape?
+2. If yes, use it. Do NOT redefine or assume the shape locally.
+3. If no, define it in `myapp.schema` first, then write the function.
+4. After modifying a schema, search for all namespaces that require
+   `myapp.schema` and verify they are still consistent.
+
 ## Namespace Docstring
 
 Every namespace must have a docstring that describes its single responsibility:
@@ -243,8 +312,12 @@ Before saving any code:
 - [ ] Empty collection handled
 - [ ] Edge cases and boundary values covered
 - [ ] Public functions have docstrings
+- [ ] Macros have docstrings with usage examples
 - [ ] Namespace has a docstring
 - [ ] All functions in the namespace are consistent with the namespace docstring; if not, update the docstring or split the namespace
+- [ ] Every cross-namespace map has a named schema in `myapp.schema`
+- [ ] No map shape is assumed locally without referencing the schema
+- [ ] After modifying a schema, all dependent namespaces verified
 - [ ] Naming follows conventions (see `references/idioms.md`)
 - [ ] Lines under 80 characters
 - [ ] Closing parens gathered on single line
