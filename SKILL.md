@@ -84,16 +84,6 @@ If this fails, ask the user to start their nREPL server:
 - Clojure (lein): `lein repl :headless`
 - Babashka: `bb nrepl-server <port>`
 
-### Port
-
-brepl auto-detects `.nrepl-port` in the project root. To specify explicitly:
-
-```bash
-brepl -p 1234 <<'EOF'
-(+ 1 1)
-EOF
-```
-
 ## Core Workflow
 
 **Never write code without REPL validation.**
@@ -101,12 +91,15 @@ EOF
 Before modifying any file:
 
 1. `read` the target file and related files
-2. Verify nREPL connection with `(+ 1 1)`
+2. Verify nREPL connection: `(+ 1 1)`
 3. Explore unfamiliar functions via `doc` / `source` (see Discovery below)
-4. Define and test functions in REPL before saving
-5. Check edge cases: nil, empty collections, invalid inputs
-6. Save only after validation
-7. Run clj-kondo after saving
+4. Balance brackets before editing: `brepl balance <file> --dry-run`
+5. Define and test functions in REPL before saving
+6. Check edge cases: nil, empty collections, invalid inputs
+7. Save the file
+8. Lint: `clj-kondo --lint <file>` — fix all warnings before proceeding
+9. Reload and verify: `(require '[myapp.core] :reload)`
+10. Complete the Pre-Save Checklist (see below)
 
 ## Discovery
 
@@ -134,6 +127,20 @@ brepl <<'EOF'
 EOF
 ```
 
+## Bracket Balancing
+
+Use `brepl balance` before and after edits — never fix brackets manually.
+
+```bash
+# Preview before editing
+brepl balance src/myapp/core.clj --dry-run
+
+# Fix in place
+brepl balance src/myapp/core.clj
+```
+
+Supports `.clj`, `.cljs`, `.cljc`, `.bb`, `.edn`.
+
 ## Linting
 
 After saving a file, always lint it:
@@ -160,8 +167,8 @@ After saving a file, always sync the REPL:
 
 ```bash
 brepl <<'EOF'
-(require '[my.namespace] :reload)
-(my.namespace/my-fn test-input)
+(require '[myapp.core] :reload)
+(myapp.core/my-fn test-input)
 EOF
 ```
 
@@ -177,45 +184,37 @@ brepl <<'EOF'
 EOF
 ```
 
-## Babashka
+---
 
-Babashka nREPL is started with `bb nrepl-server <port>`. Most Clojure workflow patterns apply. Key differences:
+## Pre-Save Checklist
 
-- Project config is `bb.edn`, not `deps.edn`
-- No AOT compilation
-- Subset of Java interop available
-- Scripts typically use `.bb` extension
+This checklist covers items that **cannot be verified by tools alone**. Complete it after linting and reloading pass.
 
-## Working with EDN
+### Namespace Docstring
 
-brepl can read, inspect, and transform EDN data:
+Every namespace must have a docstring that describes its **single responsibility**:
+
+```clojure
+(ns myapp.auth
+  "Handles authentication and session management.")
+```
+
+Before saving, verify the docstring is still accurate:
 
 ```bash
 brepl <<'EOF'
-(require '[clojure.edn :as edn])
-(def config (edn/read-string (slurp "config.edn")))
-(keys config)
+(require '[myapp.auth])
+(:doc (meta (find-ns 'myapp.auth)))
 EOF
 ```
 
-## Fixing Bracket Errors
+Judgment criteria:
+- If the docstring requires "and" or "or" to describe what the namespace does → split the namespace
+- If new functions were added that fall outside the stated responsibility → update the docstring or extract those functions
 
-Use `brepl balance` — never fix manually:
+### Macro Docstrings
 
-```bash
-# Fix in place
-brepl balance src/myapp/core.clj
-
-# Preview first
-brepl balance src/myapp/core.clj --dry-run
-```
-
-Supports `.clj`, `.cljs`, `.cljc`, `.bb`, `.edn`.
-
-## Macro Usage
-
-Prefer functions over macros. Only use macros when evaluation control or
-syntax manipulation is strictly necessary.
+Prefer functions over macros. Only use macros when evaluation control or syntax manipulation is strictly necessary.
 
 Every macro must have a docstring with a usage example:
 
@@ -226,14 +225,17 @@ Every macro must have a docstring with a usage example:
   [binding & body] ...)
 ```
 
-## Data Shape — Malli Schema
+Judgment criteria:
+- Is the macro actually necessary, or can a function do the job?
+- Does the docstring include a concrete usage example?
 
-Every map that crosses a namespace boundary must have a named schema.
+### Malli Schema
 
-### Where to define schemas
+Every map that crosses a namespace boundary must have a named schema defined in `myapp.schema`.
 
-Define all schemas in a dedicated `myapp.schema` namespace.
-Never define schemas inline at the call site.
+#### Where to define schemas
+
+Define all schemas in a dedicated `myapp.schema` namespace. Never define schemas inline at the call site.
 
 ```clojure
 (ns myapp.schema
@@ -252,10 +254,9 @@ Never define schemas inline at the call site.
    [:items [:vector :uuid]]])
 ```
 
-### Validation at namespace boundaries
+#### Validation at namespace boundaries
 
-Validate at the entry point of a namespace, not deep inside.
-Use `ex-info` with `malli.error/humanize` for actionable error messages:
+Validate at the entry point of a namespace, not deep inside. Use `ex-info` with `malli.error/humanize` for actionable error messages:
 
 ```clojure
 (ns myapp.order
@@ -271,56 +272,42 @@ Use `ex-info` with `malli.error/humanize` for actionable error messages:
   ...)
 ```
 
-### Claude workflow for data shapes
+#### Workflow for data shapes
 
 Before writing any function that accepts or returns a map:
 
 1. Check `myapp.schema` — does a schema exist for this shape?
 2. If yes, use it. Do NOT redefine or assume the shape locally.
 3. If no, define it in `myapp.schema` first, then write the function.
-4. After modifying a schema, search for all namespaces that require
-   `myapp.schema` and verify they are still consistent.
+4. After modifying a schema, search for all namespaces that require `myapp.schema` and verify they are still consistent.
 
-## Namespace Docstring
+### General
 
-Every namespace must have a docstring that describes its single responsibility:
-
-```clojure
-(ns myapp.auth
-  "Handles authentication and session management.")
-```
-
-The docstring must stay consistent with the namespace's actual contents:
-- If you add functions that fall outside the described responsibility, either update the docstring to reflect the broader scope, or extract those functions into a new namespace.
-- A docstring that requires "and" or "or" to describe what the namespace does is a signal to split.
-
-Before saving, verify:
-```bash
-brepl <<'EOF'
-(require '[myapp.auth])
-(:doc (meta (find-ns 'myapp.auth)))
-EOF
-```
-
-## Validation Checklist
-
-Before saving any code:
-
-- [ ] Happy path tested in REPL
-- [ ] clj-kondo reports no warnings
-- [ ] nil input handled
-- [ ] Empty collection handled
-- [ ] Edge cases and boundary values covered
 - [ ] Public functions have docstrings
-- [ ] Macros have docstrings with usage examples
-- [ ] Namespace has a docstring
-- [ ] All functions in the namespace are consistent with the namespace docstring; if not, update the docstring or split the namespace
-- [ ] Every cross-namespace map has a named schema in `myapp.schema`
-- [ ] No map shape is assumed locally without referencing the schema
-- [ ] After modifying a schema, all dependent namespaces verified
 - [ ] Naming follows conventions (see `references/idioms.md`)
 - [ ] Lines under 80 characters
 - [ ] Closing parens gathered on single line
+
+---
+
+## Babashka
+
+Babashka nREPL is started with `bb nrepl-server <port>`. Most Clojure workflow patterns apply. Key differences:
+
+- Project config is `bb.edn`, not `deps.edn`
+- No AOT compilation
+- Subset of Java interop available
+- Scripts typically use `.bb` extension
+
+## Working with EDN
+
+```bash
+brepl <<'EOF'
+(require '[clojure.edn :as edn])
+(def config (edn/read-string (slurp "config.edn")))
+(keys config)
+EOF
+```
 
 ## Idioms Reference
 
