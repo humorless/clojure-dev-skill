@@ -302,7 +302,7 @@ Before writing any function that accepts or returns a map:
 
 ### General
 
-- [ ] Public functions have docstrings
+- [ ] Public functions have docstrings; if the return value is a map, the docstring states its shape or references the schema
 - [ ] Naming follows conventions (see `references/idioms.md`)
 - [ ] Lines under 80 characters
 - [ ] Closing parens gathered on single line
