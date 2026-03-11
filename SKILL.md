@@ -197,6 +197,12 @@ brepl <<'EOF'
 EOF
 ```
 
+### Testing Strategy
+
+- **New features / refactoring**: Verify interactively via brepl. Do not write tests unless asked.
+- **Bug fixes**: Write a failing test that reproduces the bug first, then fix the code and confirm it passes.
+- **Pre-commit**: Before finalizing a task or preparing a commit, proactively ask if tests should be added or updated for the changed logic.
+
 ---
 
 ## Pre-Save Checklist
