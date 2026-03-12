@@ -14,13 +14,22 @@ When active, Claude will:
 
 ## Installation
 
-Claude Code skills live in `~/.claude/skills/`. Clone this repo there:
+Clone the repo to any location, then symlink the skill and command into the
+appropriate Claude Code directories:
 
 ```bash
-git clone https://github.com/humorless/clojure-dev ~/.claude/skills/clojure-dev
+git clone https://github.com/humorless/clojure-dev ~/path/to/clojure-dev
+
+# Skill
+ln -s ~/path/to/clojure-dev ~/.claude/skills/clojure-dev
+
+# Command (invoked as /refactor-pm)
+mkdir -p ~/.claude/commands
+ln -s ~/path/to/clojure-dev/refactor-policy-mechanism.md \
+      ~/.claude/commands/refactor-pm.md
 ```
 
-Claude Code picks up skills automatically from that directory — no further configuration needed.
+After that, `git pull` inside the repo updates both automatically.
 
 ### Dependencies
 
