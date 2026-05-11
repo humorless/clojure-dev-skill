@@ -66,15 +66,55 @@ Create a temporary REPL-like block in a comment to test your theory:
 
 ## Integrant Component Lifecycle Considerations
 
-If the code under test uses Integrant components:
+If the code under test uses Integrant components, understand this critical workflow:
 
-1. **Check if components are running** — Ask: "Are we debugging against a live system, or isolated test code?"
-   - If isolated: Use `(ig/init config)` to set up test components
-   - If live: Evaluate against the running `@system-state` or `@system` (whatever the project uses)
+**When you modify component code and evaluate it in the REPL, the running component may not pick up the change.** You'll see the old behavior even though the new code is loaded. This is the most common "why didn't my fix work?" scenario.
 
-2. **Avoid side effects during inspection** — REPL inspection should be read-only unless you're intentionally testing a state change.
+### The Workflow
 
-3. **Reset state between hypotheses** — If you modify state in the REPL (e.g., `(reset! my-atom ...)`), reset it back to the original before moving on.
+1. **Evaluate your code change in the REPL:**
+   ```clojure
+   ;; Load updated namespace or define updated function
+   (require '[your.component :as comp] :reload)
+   ;; Or redefine a function:
+   (defn updated-function [x] ...)
+   ```
+
+2. **Test the behavior** — Does it change?
+   ```clojure
+   ;; Call the component or function that uses it
+   (comp/some-operation ...)
+   ;; Or if system is running:
+   (get-in @system [:some-component :state])
+   ```
+
+3. **If behavior didn't change**, the component is still using the old code. **Now reset it:**
+   ```clojure
+   ;; Option A: Halt and reinit a specific component
+   (ig/halt! @system :component-key)
+   (alter-var-root #'@system (fn [s] (ig/init (:system/config @system) :component-key)))
+   
+   ;; Option B: Use your project's helper (if available)
+   ;; e.g., (reset-component! :component-key)
+   
+   ;; Option C: Full system restart (slower but safest)
+   (ig/halt! @system)
+   (alter-var-root #'@system (fn [_] (ig/init config)))
+   ```
+
+4. **Re-evaluate and test** — Does the component now reflect your change?
+
+### When Reset is Needed
+
+- You modified code in a **namespace that the component loads or uses**
+- You redefined a **function that the component calls**
+- The component has **internal state that was initialized with old code**
+
+### When Reset is NOT Needed
+
+- You're only inspecting values with `def` or `tap>`
+- You're testing pure functions that don't rely on component state
+- You're in an isolated test environment (not using the running system)
 
 ## Debugging a Test Failure: The Workflow
 
