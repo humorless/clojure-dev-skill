@@ -1,16 +1,34 @@
-# clojure-dev skill for Claude Code
+# Clojure Skills for Claude Code
 
-A Claude Code skill that gives Claude a REPL-driven development workflow for Clojure, Babashka, and EDN projects.
+A collection of Claude Code skills for robust Clojure, Babashka, and EDN development.
 
-When active, Claude will:
+## Available Skills
 
-- Evaluate code through the nREPL via `brepl` before writing any file
-- Lint with `clj-kondo` after every save
-- Enforce namespace docstrings and single-responsibility namespaces
-- Prefer functions over macros; require docstrings with usage examples on every macro
-- Define all cross-namespace map shapes as named Malli schemas in `myapp.schema`
-- Follow idiomatic Clojure conventions (threading macros, naming, layout)
-- Run a validation checklist before finalising any code
+### clojure-discovery
+Automatically explore and gather context when writing Clojure code that uses unfamiliar APIs. This skill:
+
+- Looks up documentation and source for Clojure functions and macros via `brepl`
+- Searches for Clojure wrapper libraries before falling back to Java classes
+- Prevents bugs by gathering sufficient API context before implementation
+
+Use `/clojure-discovery` when encountering unfamiliar Clojure functions, macros, Java classes, or any API you're not completely confident about.
+
+### clojure-repl-debugging
+Debug Clojure code without modifying source files. This skill:
+
+- Uses the REPL for inline inspection of values
+- Traces execution and tests hypotheses without adding logging
+- Integrates with `brepl` for efficient debugging
+
+Use `/clojure-repl-debugging` when encountering bugs, test failures, or unexpected behavior. Load this **before** adding log statements or modifying code for debugging purposes.
+
+### refactor-pm
+Identify and improve code design by separating mechanism from policy. This skill:
+
+- Scans files for opportunities to separate concerns
+- Suggests refactoring patterns that improve maintainability
+
+Use `/refactor-pm` to review code for design improvements.
 
 ## Installation
 
@@ -20,24 +38,15 @@ Install via npx:
 npx skills install humorless/clojure-dev
 ```
 
-After installation, both `/clojure-dev` and `/refactor-pm` skills will be available.
+This installs all three skills: `clojure-discovery`, `clojure-repl-debugging`, and `refactor-pm`.
 
 ### Dependencies
 
-- [brepl](https://github.com/licht1stein/brepl) — the nREPL client used for all REPL evaluation
-- [clj-kondo](https://github.com/clj-kondo/clj-kondo) — linter run after every file save
+- [brepl](https://github.com/licht1stein/brepl) — nREPL client for REPL-based inspection and evaluation
 
-Install both and make sure they are on your `PATH`.
+Install and ensure it's on your `PATH`.
 
-## Usage
-
-The skill activates automatically when Claude Code detects Clojure project files (`.clj`, `.cljs`, `.cljc`, `.bb`, `bb.edn`, `deps.edn`, `project.clj`).
-
-You can also load it explicitly with:
-
-```
-/clojure-dev
-```
+## Setup
 
 Start your nREPL server before the session:
 
@@ -52,8 +61,6 @@ bb nrepl-server 1667
 Claude will detect `.nrepl-port` automatically.
 
 ## Credits
-
-Most of the ideas here are borrowed from:
 
 - **brepl** by [@licht1stein](https://github.com/licht1stein) — https://github.com/licht1stein/brepl
 - **"One Year of LLM Usage with Clojure"** by Ivan Willig — https://www.iwillig.me/blog/one-year-of-llm-usage-with-clojure/#skills-prompts-and-opencode
