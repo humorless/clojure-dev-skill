@@ -41,6 +41,18 @@ Choose the right strategy for reading Clojure code efficiently. This skill:
 
 Use `/clojure-fast-read` whenever you need to inspect Clojure code — whether modifying a function, debugging a production issue, exploring a new codebase, or understanding dependencies. This skill ensures you read efficiently instead of opening entire files.
 
+### clj-skill-create-eval
+Evaluate Clojure skills through rigorous real-project testing. This skill:
+
+- Creates isolated test projects using Clojure Stack Lite (with/without skills)
+- Designs realistic development tasks that showcase skill value
+- Executes parallel subagent runs to ensure comparable conditions
+- Compares behavioral differences: code quality, exploration patterns, debugging approach
+- Analyzes context-logs to identify actual behavior changes vs hypothetical improvements
+- Provides structured evaluation reports with quantitative and qualitative metrics
+
+Use `/clj-skill-create-eval` when you've created or modified a Clojure skill and want to validate its effectiveness through real-world testing. This prevents vague evaluations and ensures skills actually improve development outcomes.
+
 ## Installation
 
 Install via npx:
@@ -49,7 +61,7 @@ Install via npx:
 npx skills install humorless/clojure-dev
 ```
 
-This installs all four skills: `clojure-discovery`, `clojure-repl-debugging`, `clojure-fast-read`, and `refactor-pm`.
+This installs all five skills: `clojure-discovery`, `clojure-repl-debugging`, `clojure-fast-read`, `refactor-pm`, and `clj-skill-create-eval`.
 
 ### Dependencies
 
