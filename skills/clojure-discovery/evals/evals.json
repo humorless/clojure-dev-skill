@@ -1,0 +1,23 @@
+{
+  "skill_name": "clojure-discovery",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "我需要在 Clojure 中使用 java.time.LocalDateTime 来处理时间。我需要创建一个函数，获取当前时间，并格式化为字符串。",
+      "expected_output": "Claude should ask about Clojure wrappers, search for clj-time, evaluate the wrapper, and either use the wrapper or explore java.time.LocalDateTime via brepl reflection to write accurate code.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "我需要用 Clojure 的 reduce 函数来累计计算一个列表中所有数字的总和。",
+      "expected_output": "Claude should use brepl to explore reduce's documentation, arglists, and possibly source code. Then write correct reduce expression with proper accumulator and function.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我在代码中看到一个 defrecord 宏，但不确定它具体做了什么。能帮我理解吗？",
+      "expected_output": "Claude should use brepl to macroexpand defrecord, explain the generated code, and clarify when to use defrecord vs deftype vs reify.",
+      "files": []
+    }
+  ]
+}
