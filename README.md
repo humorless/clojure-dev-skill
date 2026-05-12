@@ -63,4 +63,5 @@ Claude will detect `.nrepl-port` automatically.
 ## Credits
 
 - **brepl** by [@licht1stein](https://github.com/licht1stein) — https://github.com/licht1stein/brepl
+- **Improve your code by separating mechanism from policy** by Arne Brasseur - https://lambdaisland.com/blog/2022-03-10-mechanism-vs-policy
 - **"One Year of LLM Usage with Clojure"** by Ivan Willig — https://www.iwillig.me/blog/one-year-of-llm-usage-with-clojure/#skills-prompts-and-opencode
