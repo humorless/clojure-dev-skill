@@ -30,6 +30,17 @@ Identify and improve code design by separating mechanism from policy. This skill
 
 Use `/refactor-pm` to review code for design improvements.
 
+### clojure-fast-read
+Choose the right strategy for reading Clojure code efficiently. This skill:
+
+- Decides when to use runtime inspection (REPL) vs file reading based on intent
+- Uses `source-fn`, `doc`, and `meta` for fast, targeted exploration
+- Leverages `meta` to bridge runtime state and source file locations
+- Recommends `grep` and `sed` for targeted code extraction without reading full files
+- Distinguishes between understanding runtime behavior vs source design
+
+Use `/clojure-fast-read` whenever you need to inspect Clojure code — whether modifying a function, debugging a production issue, exploring a new codebase, or understanding dependencies. This skill ensures you read efficiently instead of opening entire files.
+
 ## Installation
 
 Install via npx:
@@ -38,7 +49,7 @@ Install via npx:
 npx skills install humorless/clojure-dev
 ```
 
-This installs all three skills: `clojure-discovery`, `clojure-repl-debugging`, and `refactor-pm`.
+This installs all four skills: `clojure-discovery`, `clojure-repl-debugging`, `clojure-fast-read`, and `refactor-pm`.
 
 ### Dependencies
 
