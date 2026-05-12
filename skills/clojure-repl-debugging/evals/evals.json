@@ -1,0 +1,23 @@
+{
+  "skill_name": "clojure-repl-debugging",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I have a failing Clojure test. The test is checking that a transformation function correctly maps user data, but it's returning a map with missing keys. I've spent 20 minutes adding println statements but still can't figure out what's going wrong. Help me debug this using REPL inspection techniques without modifying the source code.",
+      "expected_output": "The response should guide the user to use REPL-based inspection (def, tap>, comment blocks) rather than logging. Should explain how to isolate the failing function, capture intermediate values, and compare actual vs expected results. Should emphasize not modifying source code during debugging.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "I modified a function in a namespace that my Integrant component uses. I eval'd the change in the REPL and tested it directly - the function works correctly when I call it. But when I call the same operation through the component, it's still using the old behavior. What's happening and how do I fix it?",
+      "expected_output": "The response should explain the Integrant component lifecycle issue - that running components don't automatically pick up code changes. Should provide the workflow for reloading code (require with :reload) and when/how to reset the component (halt and reinit). Should clarify when reset is needed vs when it's not needed.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I suspect that a data transformation function is losing information somewhere in its pipeline, but I don't want to add logging to the code. I need to verify my hypothesis that the issue happens during the third transformation step. How can I test this theory in the REPL without touching the source file?",
+      "expected_output": "The response should demonstrate using comment blocks in the REPL, using /brepl to evaluate test code, and using def to pin values at each stage. Should show how to construct test inputs, apply the transformation step-by-step, and compare results. Should emphasize keeping the hypothesis testable without modifying production code.",
+      "files": []
+    }
+  ]
+}
