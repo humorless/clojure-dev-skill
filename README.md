@@ -22,16 +22,18 @@ Debug Clojure code without modifying source files. This skill:
 
 Use `/clojure-repl-debugging` when encountering bugs, test failures, or unexpected behavior. Load this **before** adding log statements or modifying code for debugging purposes.
 
-### clojure-fast-read
-Choose the right strategy for reading Clojure code efficiently. This skill:
+### clj-lens
+Multi-mode structural code reader for efficient Clojure inspection. This skill provides:
 
-- Decides when to use runtime inspection (REPL) vs file reading based on intent
-- Uses `source-fn`, `doc`, and `meta` for fast, targeted exploration
-- Leverages `meta` to bridge runtime state and source file locations
-- Recommends `grep` and `sed` for targeted code extraction without reading full files
-- Distinguishes between understanding runtime behavior vs source design
+- **Coordinate Read**: Extract code at a specific file:line (when you know exactly where to look)
+- **Symbol Lookup**: Find any symbol definition by name (e.g., `app.db/update-user`)
+- **Pattern Search**: Locate all symbols matching a substring (e.g., all functions containing "update")
+- **Error Context**: Extract source code from the last nREPL exception with analysis
+- **Stacktrace Parsing**: Enrich stacktraces with actual source code from each frame
 
-Use `/clojure-fast-read` whenever you need to inspect Clojure code — whether modifying a function, debugging a production issue, exploring a new codebase, or understanding dependencies. This skill ensures you read efficiently instead of opening entire files.
+All modes return structured JSON for programmatic consumption, reducing token usage compared to full-file reads.
+
+Use `/clj-lens` whenever you need to locate or understand Clojure code — avoid inefficient `grep`/`sed`/file-reading patterns. Integrates with clj-kondo (static analysis) and nREPL (runtime inspection) with graceful fallback.
 
 ### refactor-pm
 Identify and improve code design by separating mechanism from policy. This skill:
@@ -61,7 +63,7 @@ Install via npx:
 npx skills install humorless/clj-native-agent
 ```
 
-This installs all five skills: `clojure-discovery`, `clojure-repl-debugging`, `clojure-fast-read`, `refactor-pm`, and `clj-skill-create-eval`.
+This installs all five skills: `clojure-discovery`, `clojure-repl-debugging`, `clj-lens`, `refactor-pm`, and `clj-skill-create-eval`.
 
 ### Dependencies
 
