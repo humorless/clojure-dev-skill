@@ -95,16 +95,18 @@
 (defn symbol-mode [symbol-name]
   (let [analysis (query-clj-kondo)]
     (if-not analysis
-      (print-json (error-response "clj-kondo-unavailable"
-                                 "clj-kondo not found. Install with: npm install -g clj-kondo"))
+      (do (print-json (error-response "clj-kondo-unavailable"
+                                     "clj-kondo not found. Install with: npm install -g clj-kondo"))
+          (System/exit 1))
       (let [matches (find-by-symbol analysis symbol-name)]
         (if (empty? matches)
           ;; No exact match, try suggestions
           (let [suggestions (find-by-pattern analysis
                                               (last (str/split symbol-name #"/")))]
             (if (empty? suggestions)
-              (print-json (error-response "symbol-not-found"
-                                         (str "Symbol " symbol-name " not found")))
+              (do (print-json (error-response "symbol-not-found"
+                                             (str "Symbol " symbol-name " not found")))
+                  (System/exit 1))
               (print-json (suggestion-response
                           "Exact match not found. Did you mean one of these?"
                           (map #(select-keys % [:name :namespace :file :line]) suggestions)))))
@@ -122,10 +124,12 @@
                                            :file file
                                            :line line
                                            :form (z/string form-match)}))
-                  (print-json (error-response "form-not-extracted"
-                                            (str "Could not extract form at line " line)))))
+                  (do (print-json (error-response "form-not-extracted"
+                                                (str "Could not extract form at line " line)))
+                      (System/exit 1))))
               (catch Exception e
-                (print-json (error-response "read-error" (.getMessage e)))))))))))
+                (do (print-json (error-response "read-error" (.getMessage e)))
+                    (System/exit 1))))))))))
 
 ;; ============================================================================
 ;; Mode: Find (Placeholder - implemented in Task 4)
