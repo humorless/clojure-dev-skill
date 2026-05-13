@@ -1,4 +1,4 @@
-# Clojure Skills for Claude Code
+# Clojure Skills for Coding Agent
 
 A collection of Claude Code skills for robust Clojure, Babashka, and EDN development.
 
@@ -22,14 +22,6 @@ Debug Clojure code without modifying source files. This skill:
 
 Use `/clojure-repl-debugging` when encountering bugs, test failures, or unexpected behavior. Load this **before** adding log statements or modifying code for debugging purposes.
 
-### refactor-pm
-Identify and improve code design by separating mechanism from policy. This skill:
-
-- Scans files for opportunities to separate concerns
-- Suggests refactoring patterns that improve maintainability
-
-Use `/refactor-pm` to review code for design improvements.
-
 ### clojure-fast-read
 Choose the right strategy for reading Clojure code efficiently. This skill:
 
@@ -40,6 +32,14 @@ Choose the right strategy for reading Clojure code efficiently. This skill:
 - Distinguishes between understanding runtime behavior vs source design
 
 Use `/clojure-fast-read` whenever you need to inspect Clojure code — whether modifying a function, debugging a production issue, exploring a new codebase, or understanding dependencies. This skill ensures you read efficiently instead of opening entire files.
+
+### refactor-pm
+Identify and improve code design by separating mechanism from policy. This skill:
+
+- Scans files for opportunities to separate concerns
+- Suggests refactoring patterns that improve maintainability
+
+Use `/refactor-pm` to review code for design improvements.
 
 ### clj-skill-create-eval
 Evaluate Clojure skills through rigorous real-project testing. This skill:
