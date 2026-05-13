@@ -80,13 +80,9 @@ This installs all five skills: `clj-discover`, `clj-debug`, `clj-replace`, `clj-
 
 ### 1. Install Optional Dependencies (Recommended)
 
-For full functionality, install these optional tools:
+For full REPL-based debugging, install brepl:
 
 ```bash
-# Install clj-kondo for static analysis (enables --symbol and --find modes)
-npm install -g clj-kondo
-
-# Install brepl for REPL interaction (enables /clj-debug and --last-error mode)
 npm install -g brepl
 ```
 
@@ -135,6 +131,5 @@ These skills follow key principles:
 
 - **brepl** by [@licht1stein](https://github.com/licht1stein) — https://github.com/licht1stein/brepl
 - **rewrite-clj** for structural Clojure parsing — https://github.com/clj-commons/rewrite-clj
-- **clj-kondo** for static analysis — https://github.com/clj-kondo/clj-kondo
 - **Improve your code by separating mechanism from policy** by Arne Brasseur — https://lambdaisland.com/blog/2022-03-10-mechanism-vs-policy
 - **"One Year of LLM Usage with Clojure"** by Ivan Willig — https://www.iwillig.me/blog/one-year-of-llm-usage-with-clojure/#skills-prompts-and-opencode

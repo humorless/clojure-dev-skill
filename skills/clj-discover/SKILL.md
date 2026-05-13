@@ -5,7 +5,7 @@ description: "When writing Clojure code with unfamiliar Java interop or macros, 
 
 # Clojure Code Discovery
 
-When writing Clojure code with unfamiliar APIs, gather context before writing. This skill focuses on **Java interop** and **macros** (for general function exploration, use [[clj-lens]]).
+When writing Clojure code with unfamiliar APIs, gather context before writing. This skill focuses on **Java interop** and **macros**.
 
 ## When to Use This Skill
 
