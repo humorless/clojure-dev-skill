@@ -1,6 +1,6 @@
 ---
 name: clj-skill-eval
-description: Evaluate Clojure skills through rigorous real-project testing with and without skills enabled. Use this skill whenever you need to assess whether a Clojure skill (like clj-discover, clj-debug, clj-lens) actually improves development outcomes. Compare behavior differences via context-logs, code quality, documentation depth, and test comprehensiveness. This prevents vague or hypothetical evaluation and forces concrete real-world testing.
+description: Evaluate Clojure skills through rigorous real-project testing with and without skills enabled. Use this skill whenever you need to assess whether a Clojure skill (like clj-discover, clj-debug, clj-replace) actually improves development outcomes. Compare behavior differences via context-logs, code quality, documentation depth, and test comprehensiveness. This prevents vague or hypothetical evaluation and forces concrete real-world testing.
 ---
 
 # Clojure Skill Evaluation Framework
@@ -38,7 +38,7 @@ The evaluation method:
 - **Concrete requirements** - Clear success criteria, not ambiguous specs
 - **Medium complexity** - Enough to showcase skill value, not trivial (5-15 min per version)
 - **Type diversity** - Different task types reveal different skill strengths:
-  - **Discovery task**: "Implement feature using unfamiliar library/API" (tests clj-lens, clj-discover)
+  - **Discovery task**: "Implement feature using unfamiliar library/API" (tests clj-discover)
   - **Debugging task**: "Fix a bug in existing system" (tests clj-debug)
   - **Exploration task**: "Understand and modify macro behavior" (tests clj-discover)
   - **Integration task**: "Use Java library via interop" (tests clj-discover)
@@ -159,7 +159,7 @@ Execute this task in /path/to/my-test-with-skill:
 5. Use these Clojure skills as they become relevant:
    - clj-discover (understanding APIs, Java interop, macros)
    - clj-debug (interactive debugging via brepl)
-   - clj-lens (understanding unfamiliar functions)
+   - clj-replace (structural code replacement)
 
 Focus: Complete the task with skill guidance.
 ```
@@ -275,7 +275,7 @@ One sentence: Did the skill improve development outcomes?
 If skill effectiveness is unclear:
 
 1. **Design a task better suited to the skill**
-   - If clj-lens wasn't triggered: add a task requiring exploration of unfamiliar functions
+   - If clj-discover wasn't triggered: add a task requiring exploration of unfamiliar APIs
    - If clj-debug wasn't used: add a task requiring interactive debugging
 
 2. **Run evaluation again** with the new task
@@ -306,7 +306,7 @@ If skill effectiveness is unclear:
 
 Use these to design varied evaluation tasks:
 
-### 1. Discovery Task (triggers clj-lens, clj-discover)
+### 1. Discovery Task (triggers clj-discover)
 "Implement feature using unfamiliar library"
 - Example: "Add JWT authentication using auth0 library"
 - Skill value: Helps navigate unfamiliar API without trial-and-error
