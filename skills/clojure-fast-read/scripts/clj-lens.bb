@@ -89,11 +89,43 @@
       (System/exit 1))))
 
 ;; ============================================================================
-;; Mode: Symbol Lookup (Placeholder - implemented in Task 3)
+;; Mode: Symbol Lookup (Implemented in Task 3)
 ;; ============================================================================
 
 (defn symbol-mode [symbol-name]
-  (print-json (error-response "not-implemented" "Symbol mode not yet implemented")))
+  (let [analysis (query-clj-kondo)]
+    (if-not analysis
+      (print-json (error-response "clj-kondo-unavailable"
+                                 "clj-kondo not found. Install with: npm install -g clj-kondo"))
+      (let [matches (find-by-symbol analysis symbol-name)]
+        (if (empty? matches)
+          ;; No exact match, try suggestions
+          (let [suggestions (find-by-pattern analysis
+                                              (last (str/split symbol-name #"/")))]
+            (if (empty? suggestions)
+              (print-json (error-response "symbol-not-found"
+                                         (str "Symbol " symbol-name " not found")))
+              (print-json (suggestion-response
+                          "Exact match not found. Did you mean one of these?"
+                          (map #(select-keys % [:name :namespace :file :line]) suggestions)))))
+          ;; Exact match found, extract code
+          (let [match (first matches)
+                file (:file match)
+                line (:line match)]
+            (try
+              (let [zloc (z/of-file file)
+                    row line
+                    form-match (z/find-depth-first zloc #(= (-> % z/node meta :row) row))]
+                (if form-match
+                  (print-json (ok-response "symbol"
+                                          {:symbol symbol-name
+                                           :file file
+                                           :line line
+                                           :form (z/string form-match)}))
+                  (print-json (error-response "form-not-extracted"
+                                            (str "Could not extract form at line " line)))))
+              (catch Exception e
+                (print-json (error-response "read-error" (.getMessage e)))))))))))
 
 ;; ============================================================================
 ;; Mode: Find (Placeholder - implemented in Task 4)
