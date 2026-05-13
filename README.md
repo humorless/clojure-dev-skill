@@ -4,17 +4,17 @@ A collection of specialized Claude Code skills that help AI agents write, debug,
 
 ## Why These Skills?
 
-**The Problem:** AI agents working with Clojure often resort to inefficient patterns:
-- Full-file reads to find a single function
-- Grep-based searching that returns partial matches
-- Manual REPL inspection for every question about code state
-- Contextual overhead when understanding errors and stacktraces
+**The Problem:** AI agents working with Clojure often face friction:
+- Manual exploration of unfamiliar APIs and their documentation
+- Debugging sessions that require modifying code and adding logging
+- Code modifications that fail because formatting differs from the source
+- Lack of systematic approaches to understand and improve code design
 
 **The Solution:** Structured skills that leverage Clojure's nature as a data-driven, structural language:
-- Precise code location and extraction tools
-- Static and runtime analysis for efficient exploration
-- Systematic debugging without source modification
-- Context-aware discovery for unfamiliar APIs
+- Context-aware discovery for unfamiliar APIs and dependencies
+- Systematic debugging using REPL inspection without modifying source
+- Format-insensitive structural code replacement
+- Design pattern analysis for code improvement
 
 ## Available Skills
 
