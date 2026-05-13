@@ -14,7 +14,7 @@ A collection of specialized Claude Code skills that help AI agents write, debug,
 - Context-aware discovery for unfamiliar APIs and dependencies
 - Systematic debugging using REPL inspection without modifying source
 - Format-insensitive structural code replacement
-- Design pattern analysis for code improvement
+- Mechanism-policy separation analysis for code maintainability
 
 ## Available Skills
 
