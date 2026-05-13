@@ -1,6 +1,6 @@
 ---
-name: clj-skill-create-eval
-description: Evaluate Clojure skills through rigorous real-project testing with and without skills enabled. Use this skill whenever you need to assess whether a Clojure skill (like clojure-discovery, clojure-repl-debugging, clojure-fast-read) actually improves development outcomes. Compare behavior differences via context-logs, code quality, documentation depth, and test comprehensiveness. This prevents vague or hypothetical evaluation and forces concrete real-world testing.
+name: clj-skill-eval
+description: Evaluate Clojure skills through rigorous real-project testing with and without skills enabled. Use this skill whenever you need to assess whether a Clojure skill (like clj-discover, clj-debug, clj-lens) actually improves development outcomes. Compare behavior differences via context-logs, code quality, documentation depth, and test comprehensiveness. This prevents vague or hypothetical evaluation and forces concrete real-world testing.
 ---
 
 # Clojure Skill Evaluation Framework

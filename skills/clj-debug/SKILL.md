@@ -1,5 +1,5 @@
 ---
-name: clojure-repl-debugging
+name: clj-debug
 description: "Use this skill whenever debugging Clojure code. CRITICAL: Before Claude adds log statements, uses println, or modifies code for debugging purposes, invoke this skill to redirect to REPL-based inline inspection instead. Works with /brepl to inspect values, trace execution, and test hypotheses without touching source code. Especially important when tests fail - use REPL inspection to understand the failure before adding any logging."
 compatibility: Requires /brepl skill access, works with Integrant-based systems
 ---

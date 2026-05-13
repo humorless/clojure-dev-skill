@@ -1,5 +1,5 @@
 ---
-name: clojure-discovery
+name: clj-discover
 description: "When writing Clojure code with unfamiliar Java interop or macros, use this skill to explore and gather context. For Java interop, search for Clojure wrapper libraries first (via WebSearch), then explore Java classes if needed. For macros, expand them to understand what code they generate. This prevents bugs from incorrect API usage. Use this skill when encountering Java classes or unclear macros."
 ---
 

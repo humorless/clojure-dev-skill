@@ -1,5 +1,5 @@
 ---
-name: refactor-pm
+name: clj-refactor
 description: Scan files for mechanism/policy separation opportunities
 ---
 
