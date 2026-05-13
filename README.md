@@ -36,19 +36,6 @@ Debug Clojure code without modifying source files. This skill:
 
 Use `/clj-debug` when encountering bugs, test failures, or unexpected behavior. Load this **before** adding log statements or modifying code for debugging purposes.
 
-### clj-lens
-Multi-mode structural code reader for efficient Clojure inspection. This skill provides:
-
-- **Read**: Extract code at file:line:column (precise form selection, returns raw code)
-- **Symbol Lookup**: Find any symbol definition by name (e.g., `app.db/update-user`)
-- **Pattern Search**: Locate all symbols matching a substring (e.g., all functions containing "update")
-- **Error Context**: Extract source code from the last nREPL exception with analysis
-- **Stacktrace Parsing**: Enrich stacktraces with actual source code from each frame
-
-Read mode returns raw code; other modes return structured JSON for programmatic consumption. All reduce token usage compared to full-file reads.
-
-Use `/clj-lens` to locate and extract Clojure code with structural precision — better than `grep`/`sed` for form-level extraction and symbol lookups. Complements standard text tools by understanding code structure. Integrates with clj-kondo (static analysis) and nREPL (runtime inspection) with graceful fallback.
-
 ### clj-refactor
 Identify and improve code design by separating mechanism from policy. This skill:
 
@@ -77,7 +64,7 @@ Install via npx:
 npx skills install humorless/clj-native-agent
 ```
 
-This installs all five skills: `clj-discover`, `clj-debug`, `clj-lens`, `clj-refactor`, and `clj-skill-eval`.
+This installs all four skills: `clj-discover`, `clj-debug`, `clj-refactor`, and `clj-skill-eval`.
 
 ## Quick Start
 
@@ -112,7 +99,6 @@ Claude will auto-detect `.nrepl-port` and use it automatically.
 In Claude Code:
 
 ```
-/clj-lens --symbol app.db/update-user     # Find a symbol definition
 /clj-discover                              # Understand unfamiliar APIs
 /clj-debug                                 # Debug without modifying code
 /clj-refactor                              # Improve code design
@@ -121,23 +107,9 @@ In Claude Code:
 ## How They Work Together
 
 **Typical workflow:**
-1. Use `/clj-lens` to locate and extract code precisely
-2. Use `/clj-discover` to understand unfamiliar dependencies
-3. Use `/clj-debug` if behavior doesn't match expectations
-4. Use `/clj-refactor` to improve design during refactoring
-
-## Architecture Notes
-
-### clj-lens: Structural Code Reading
-
-The `clj-lens` tool is the foundation of efficient code inspection:
-
-- **Static Analysis** (clj-kondo): Fast project-wide symbol discovery without executing code
-- **Structural Parsing** (rewrite-clj): Extract only what you need using S-expression parsing
-- **Runtime Context** (nREPL): Optional integration for examining running system state
-- **Graceful Degradation**: All features work standalone; optional dependencies fail cleanly
-
-All output is structured JSON, designed for programmatic consumption and reduced token usage.
+1. Use `/clj-discover` to understand unfamiliar dependencies
+2. Use `/clj-debug` if behavior doesn't match expectations
+3. Use `/clj-refactor` to improve design during refactoring
 
 ## Design Philosophy
 
