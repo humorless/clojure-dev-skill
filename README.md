@@ -36,6 +36,16 @@ Debug Clojure code without modifying source files. This skill:
 
 Use `/clj-debug` when encountering bugs, test failures, or unexpected behavior. Load this **before** adding log statements or modifying code for debugging purposes.
 
+### clj-replace
+Format-insensitive code replacement based on S-expression equivalence. This skill:
+
+- Parses code into S-expression trees for structural comparison
+- Matches based on semantics, ignoring whitespace, indentation, and line breaks
+- Preserves the original file's formatting while replacing matched nodes
+- Provides detailed error reporting with location information
+
+Use `/clj-replace` when Claude Code's `str_replace` fails due to formatting differences, or when you need reliable structural replacement of Clojure code.
+
 ### clj-refactor
 Identify and improve code design by separating mechanism from policy. This skill:
 
@@ -64,7 +74,7 @@ Install via npx:
 npx skills install humorless/clj-native-agent
 ```
 
-This installs all four skills: `clj-discover`, `clj-debug`, `clj-refactor`, and `clj-skill-eval`.
+This installs all five skills: `clj-discover`, `clj-debug`, `clj-replace`, `clj-refactor`, and `clj-skill-eval`.
 
 ## Quick Start
 
@@ -101,6 +111,7 @@ In Claude Code:
 ```
 /clj-discover                              # Understand unfamiliar APIs
 /clj-debug                                 # Debug without modifying code
+/clj-replace file.clj "old" "new"         # Structural replacement (format-insensitive)
 /clj-refactor                              # Improve code design
 ```
 
