@@ -9,12 +9,6 @@
     },
     {
       "id": 1,
-      "prompt": "I modified a function in a namespace that my Integrant component uses. I eval'd the change in the REPL and tested it directly - the function works correctly when I call it. But when I call the same operation through the component, it's still using the old behavior. What's happening and how do I fix it?",
-      "expected_output": "Should recognize the user is misunderstanding how component lifecycle works, not a code problem. Should avoid suggesting \"maybe there's a bug in my code\" and instead explain that running components hold references to the old version of the function. Should explain why eval'ing in the REPL isn't enough: the component was initialized with the old function closure, not the new one. Should provide the correct workflow: (1) require namespace with :reload to update function definition, (2) decide if component reset is needed (yes if component stores function reference, no if it looks up dynamically), (3) use Integrant (halt!) and (init) to reinitialize with updated code. Should clarify the distinction: REPL redefinition changes the global definition, but running components may have captured the old version.",
-      "files": []
-    },
-    {
-      "id": 2,
       "prompt": "I suspect that a data transformation function is losing information somewhere in its pipeline, but I don't want to add logging to the code. I need to verify my hypothesis that the issue happens during the third transformation step. How can I test this theory in the REPL without touching the source file?",
       "expected_output": "Should recognize the user is taking a good approach (hypothesis-driven debugging) and avoid suggesting they add logging to production code. Should explain why modifying source with debug statements is problematic: (1) pollutes production code, (2) requires recompilation/reloading, (3) makes hypothesis testing slow and painful. Should instead demonstrate REPL-based hypothesis testing: (1) use def to pin intermediate values and inspect them, (2) use /brepl to evaluate each transformation step independently, (3) apply each step of the pipeline sequentially in the REPL, (4) compare results side-by-side to identify where information is lost. Should show how to reconstruct the pipeline step-by-step without modifying the source, isolate the third transformation, and pinpoint the failure. Should emphasize that hypothesis-driven inline inspection is faster and cleaner than adding logging.",
       "files": []
