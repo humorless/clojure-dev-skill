@@ -128,17 +128,12 @@
           column (Integer/parseInt col)
           match (collect-at-position zloc row column)]
       (if match
-        (print-json (ok-response "read"
-                                 {:file file
-                                  :line row
-                                  :column column
-                                  :form (z/string match)}))
-        (do (print-json (error-response "not-found"
-                                       (str "No form found at line " line " column " col)))
+        (println (z/string match))
+        (do (println (str "Error: No form found at line " line " column " col) System/err)
             (System/exit 1))))
     (catch Exception e
-      (print-json (error-response "read-error" (.getMessage e)))
-      (System/exit 1))))
+      (do (println (str "Error: " (.getMessage e)) System/err)
+          (System/exit 1)))))
 
 ;; ============================================================================
 ;; Mode: Symbol Lookup (Implemented in Task 3)

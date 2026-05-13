@@ -10,10 +10,9 @@
       {:status "error" :error "exit-code" :exit (:exit result)})))
 
 (t/deftest test-read-mode
-  (let [response (run-clj-lens "--read" "3" "1" "skills/clj-lens/scripts/clj-lens.bb")]
-    (t/is (= (:status response) "ok"))
-    (t/is (= (:mode response) "read"))
-    (t/is (contains? (:data response) :form))))
+  (let [result (shell/sh "bb" "skills/clj-lens/scripts/clj-lens.bb" "--read" "3" "1" "skills/clj-lens/scripts/clj-lens.bb")]
+    (t/is (zero? (:exit result)))
+    (t/is (str/includes? (:out result) "require"))))
 
 (t/deftest test-symbol-mode-error
   (let [response (run-clj-lens "--symbol" "fake.ns/fake")]

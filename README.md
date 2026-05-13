@@ -39,13 +39,13 @@ Use `/clj-debug` when encountering bugs, test failures, or unexpected behavior. 
 ### clj-lens
 Multi-mode structural code reader for efficient Clojure inspection. This skill provides:
 
-- **Read**: Extract code at file:line:column (precise form selection, understands bracket matching like a structural enhancement to `sed`)
+- **Read**: Extract code at file:line:column (precise form selection, returns raw code)
 - **Symbol Lookup**: Find any symbol definition by name (e.g., `app.db/update-user`)
 - **Pattern Search**: Locate all symbols matching a substring (e.g., all functions containing "update")
 - **Error Context**: Extract source code from the last nREPL exception with analysis
 - **Stacktrace Parsing**: Enrich stacktraces with actual source code from each frame
 
-All modes return structured JSON for programmatic consumption, reducing token usage compared to full-file reads.
+Read mode returns raw code; other modes return structured JSON for programmatic consumption. All reduce token usage compared to full-file reads.
 
 Use `/clj-lens` whenever you need to locate or understand Clojure code — avoid inefficient `grep`/`sed`/file-reading patterns. Integrates with clj-kondo (static analysis) and nREPL (runtime inspection) with graceful fallback.
 

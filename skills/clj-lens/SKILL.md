@@ -8,12 +8,13 @@ description: Multi-mode structural Clojure code reader. Efficiently locate symbo
 Clojure code is structural. Reading it efficiently means using precision tools built for S-expressions, not generic text tools.
 
 **clj-lens** is a multi-mode reader that answers common agent questions:
-- "Where is this symbol defined?"
-- "What does this function look like?"
-- "Where is this error happening?"
-- "What code is in this stacktrace?"
+- "Extract code at this exact location" — Read mode returns raw code
+- "Where is this symbol defined?" — Symbol mode with structural lookup
+- "What does this function look like?" — Multi-mode extraction
+- "Where is this error happening?" — Error context extraction
+- "What code is in this stacktrace?" — Frame-by-frame analysis
 
-All modes return structured JSON for reliable programmatic consumption.
+Most modes return structured JSON; Read mode returns raw code for direct use.
 
 ---
 
@@ -21,26 +22,25 @@ All modes return structured JSON for reliable programmatic consumption.
 
 Choose the mode based on what you need to know:
 
-### 1. **Coordinate Read** — Get code at a specific file:line
+### 1. **Read** — Extract code at file:line:column with bracket-aware precision
 
-**When to use:** You know exactly where code is (from error messages, metadata, or earlier searches)
+**When to use:** You know exactly where code is and want to extract just that form (from error messages, metadata, or earlier searches)
 
 ```bash
-./scripts/clj-lens.bb src/app/core.clj 42
+./scripts/clj-lens.bb --read 42 5 src/app/core.clj
 ```
 
+**How it works:**
+- Column number specifies which form to extract (like a structural enhancement to `sed`)
+- Smaller column → outer forms; larger column → inner forms
+- Understands bracket matching (unlike text-based tools)
+
 **Output:**
-```json
-{
-  "status": "ok",
-  "mode": "coordinate",
-  "data": {
-    "file": "src/app/core.clj",
-    "line": 42,
-    "form": "(defn get-user [id] ...)"
-  }
-}
 ```
+(defn get-user [id] ...)
+```
+
+Direct code output (not JSON), ready to paste or pipe to other tools.
 
 ---
 
@@ -197,7 +197,7 @@ Choose the mode based on what you need to know:
 
 | Situation | Mode | Command |
 |-----------|------|---------|
-| You know file + line | Coordinate | `clj-lens.bb src/app.clj 42` |
+| You know file + line:column | Read | `clj-lens.bb --read 42 5 src/app.clj` |
 | You have a symbol name | Symbol | `clj-lens.bb --symbol app.db/user` |
 | You remember part of a name | Find | `clj-lens.bb --find "update"` |
 | REPL threw an error | Last Error | `clj-lens.bb --last-error` |
@@ -207,10 +207,12 @@ Choose the mode based on what you need to know:
 
 ## Key Features
 
-- **JSON Output:** All modes return structured JSON (with consistent `status`, `mode`, `data` envelope)
-- **No Full-File Reads:** Extract only the code you need using structural parsing
+- **Read Mode Direct Output:** Read mode returns raw code, ready to use (not JSON-wrapped)
+- **Structured JSON for Metadata:** Symbol, Find, Last Error, Trace modes return JSON with location metadata
+- **No Full-File Reads:** Extract only the code you need using structural S-expression parsing
+- **Bracket-Aware:** Unlike sed/grep, understands Clojure's structural nature (parentheses, brackets)
 - **Graceful Degradation:** Optional dependencies (clj-kondo, nREPL) fail cleanly with helpful error messages
-- **Agent-Friendly:** Structured output reduces token usage compared to reading entire files or using grep
+- **Agent-Friendly:** Reduces token usage compared to reading entire files
 - **Fast:** Queries complete in milliseconds
 
 ---
