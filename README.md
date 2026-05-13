@@ -1,6 +1,20 @@
-# Clojure Skills for Coding Agent
+# clj-native-agent: AI-Native Skills for Clojure Development
 
-A collection of Claude Code skills for robust Clojure, Babashka, and EDN development.
+A collection of specialized Claude Code skills that help AI agents write, debug, and refactor Clojure code efficiently. These skills address the unique challenges of writing and maintaining Clojure in an AI-driven workflow.
+
+## Why These Skills?
+
+**The Problem:** AI agents working with Clojure often resort to inefficient patterns:
+- Full-file reads to find a single function
+- Grep-based searching that returns partial matches
+- Manual REPL inspection for every question about code state
+- Contextual overhead when understanding errors and stacktraces
+
+**The Solution:** Structured skills that leverage Clojure's nature as a data-driven, structural language:
+- Precise code location and extraction tools
+- Static and runtime analysis for efficient exploration
+- Systematic debugging without source modification
+- Context-aware discovery for unfamiliar APIs
 
 ## Available Skills
 
@@ -65,28 +79,79 @@ npx skills install humorless/clj-native-agent
 
 This installs all five skills: `clojure-discovery`, `clojure-repl-debugging`, `clj-lens`, `refactor-pm`, and `clj-skill-create-eval`.
 
-### Dependencies
+## Quick Start
 
-- [brepl](https://github.com/licht1stein/brepl) — nREPL client for REPL-based inspection and evaluation
+### 1. Install Optional Dependencies (Recommended)
 
-Install and ensure it's on your `PATH`.
-
-## Setup
-
-Start your nREPL server before the session:
+For full functionality, install these optional tools:
 
 ```bash
-# Clojure (deps.edn)
+# Install clj-kondo for static analysis (enables --symbol and --find modes)
+npm install -g clj-kondo
+
+# Install brepl for REPL interaction (enables /clojure-repl-debugging and --last-error mode)
+npm install -g brepl
+```
+
+### 2. Start nREPL (If Using Runtime Inspection)
+
+Start an nREPL server before your Claude Code session:
+
+```bash
+# Clojure project
 clj -M:nrepl
 
-# Babashka
+# Babashka project
 bb nrepl-server 1667
 ```
 
-Claude will detect `.nrepl-port` automatically.
+Claude will auto-detect `.nrepl-port` and use it automatically.
+
+### 3. Use the Skills
+
+In Claude Code:
+
+```
+/clj-lens --symbol app.db/update-user     # Find a symbol definition
+/clojure-discovery                         # Understand unfamiliar APIs
+/clojure-repl-debugging                    # Debug without modifying code
+/refactor-pm                               # Improve code design
+```
+
+## How They Work Together
+
+**Typical workflow:**
+1. Use `/clj-lens` to locate and extract code precisely
+2. Use `/clojure-discovery` to understand unfamiliar dependencies
+3. Use `/clojure-repl-debugging` if behavior doesn't match expectations
+4. Use `/refactor-pm` to improve design during refactoring
+
+## Architecture Notes
+
+### clj-lens: Structural Code Reading
+
+The `clj-lens` tool is the foundation of efficient code inspection:
+
+- **Static Analysis** (clj-kondo): Fast project-wide symbol discovery without executing code
+- **Structural Parsing** (rewrite-clj): Extract only what you need using S-expression parsing
+- **Runtime Context** (nREPL): Optional integration for examining running system state
+- **Graceful Degradation**: All features work standalone; optional dependencies fail cleanly
+
+All output is structured JSON, designed for programmatic consumption and reduced token usage.
+
+## Design Philosophy
+
+These skills follow key principles:
+
+- **Structural, Not Textual**: Leverage Clojure's nature as code-as-data
+- **Precision Over Breadth**: Extract exactly what's needed, not entire files
+- **Optional Dependencies**: Core functionality works standalone; extras enhance capability
+- **AI-Friendly**: Structured output, consistent interfaces, reduced context overhead
 
 ## Credits
 
 - **brepl** by [@licht1stein](https://github.com/licht1stein) — https://github.com/licht1stein/brepl
-- **Improve your code by separating mechanism from policy** by Arne Brasseur - https://lambdaisland.com/blog/2022-03-10-mechanism-vs-policy
+- **rewrite-clj** for structural Clojure parsing — https://github.com/clj-commons/rewrite-clj
+- **clj-kondo** for static analysis — https://github.com/clj-kondo/clj-kondo
+- **Improve your code by separating mechanism from policy** by Arne Brasseur — https://lambdaisland.com/blog/2022-03-10-mechanism-vs-policy
 - **"One Year of LLM Usage with Clojure"** by Ivan Willig — https://www.iwillig.me/blog/one-year-of-llm-usage-with-clojure/#skills-prompts-and-opencode
