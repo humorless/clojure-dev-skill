@@ -24,7 +24,7 @@ The evaluation method:
 ### Define the Skill(s) to Evaluate
 
 **Input:** 
-- Skill name and path (e.g., `clojure-discovery`, `clojure-repl-debugging`)
+- Skill name and path (e.g., `clj-discover`, `clj-debug`)
 - What behavior should the skill change? (e.g., "Should shift from log-based debugging to REPL-based debugging")
 
 **Output:**
@@ -38,10 +38,10 @@ The evaluation method:
 - **Concrete requirements** - Clear success criteria, not ambiguous specs
 - **Medium complexity** - Enough to showcase skill value, not trivial (5-15 min per version)
 - **Type diversity** - Different task types reveal different skill strengths:
-  - **Discovery task**: "Implement feature using unfamiliar library/API" (tests clj-lens, clojure-discovery)
-  - **Debugging task**: "Fix a bug in existing system" (tests clojure-repl-debugging)
-  - **Exploration task**: "Understand and modify macro behavior" (tests clojure-discovery)
-  - **Integration task**: "Use Java library via interop" (tests clojure-discovery)
+  - **Discovery task**: "Implement feature using unfamiliar library/API" (tests clj-lens, clj-discover)
+  - **Debugging task**: "Fix a bug in existing system" (tests clj-debug)
+  - **Exploration task**: "Understand and modify macro behavior" (tests clj-discover)
+  - **Integration task**: "Use Java library via interop" (tests clj-discover)
 
 **Example Task:**
 ```
@@ -157,8 +157,8 @@ Execute this task in /path/to/my-test-with-skill:
    - What exploration patterns did you use?
    - Did you use REPL-based debugging or log-based?
 5. Use these Clojure skills as they become relevant:
-   - clojure-discovery (understanding APIs, Java interop, macros)
-   - clojure-repl-debugging (interactive debugging via brepl)
+   - clj-discover (understanding APIs, Java interop, macros)
+   - clj-debug (interactive debugging via brepl)
    - clj-lens (understanding unfamiliar functions)
 
 Focus: Complete the task with skill guidance.
@@ -276,7 +276,7 @@ If skill effectiveness is unclear:
 
 1. **Design a task better suited to the skill**
    - If clj-lens wasn't triggered: add a task requiring exploration of unfamiliar functions
-   - If clojure-repl-debugging wasn't used: add a task requiring interactive debugging
+   - If clj-debug wasn't used: add a task requiring interactive debugging
 
 2. **Run evaluation again** with the new task
 
@@ -306,22 +306,22 @@ If skill effectiveness is unclear:
 
 Use these to design varied evaluation tasks:
 
-### 1. Discovery Task (triggers clj-lens, clojure-discovery)
+### 1. Discovery Task (triggers clj-lens, clj-discover)
 "Implement feature using unfamiliar library"
 - Example: "Add JWT authentication using auth0 library"
 - Skill value: Helps navigate unfamiliar API without trial-and-error
 
-### 2. Debugging Task (triggers clojure-repl-debugging)
+### 2. Debugging Task (triggers clj-debug)
 "Fix a bug in a multi-component system"
 - Example: "Users report login failures; debug Integrant system lifecycle"
 - Skill value: Shifts from log-based to interactive REPL debugging
 
-### 3. Macro/Meta Task (triggers clojure-discovery)
+### 3. Macro/Meta Task (triggers clj-discover)
 "Understand and modify macro behavior"
 - Example: "Extend defroutes macro to support new pattern"
 - Skill value: Explains macro expansion and meta-patterns
 
-### 4. Java Interop Task (triggers clojure-discovery)
+### 4. Java Interop Task (triggers clj-discover)
 "Integrate Java library"
 - Example: "Add system monitoring via OSHI library" (what we tested)
 - Skill value: Clarifies Java API navigation and method selection
