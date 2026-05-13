@@ -12,12 +12,6 @@
       "prompt": "I'm looking at code that uses defprotocol and reify, but I don't understand how they work together. What does reify actually expand to? Can you show me what the generated code looks like?",
       "expected_output": "Should recognize that understanding macro behavior requires expanding the macro to see generated code. Should not try to explain from memory. Instead, should use brepl to call (macroexpand '(reify ...)) and show the actual generated code. Should explain what the expansion reveals: (1) reify creates an inline instance of the protocol, (2) it generates a concrete class with the specified method implementations, (3) the expansion shows method names and signatures clearly. Should clarify when to use reify (inline instances) vs defrecord/deftype (named types).",
       "files": []
-    },
-    {
-      "id": 2,
-      "prompt": "I'm about to write some code that uses Java reflection on an unfamiliar class, but I'm not sure what methods are available. What's the safest way to explore this?",
-      "expected_output": "Should recognize that blindly guessing Java method names leads to bugs (wrong method signatures, missing overloads, incorrect assumptions). Should instead use brepl with clojure.reflect to systematically explore: (1) list all public methods via (r/reflect JavaClass), (2) check method signatures and arglists, (3) verify return types. Should explain why reflection matters: (1) prevents method-not-found errors, (2) clarifies which overload to use, (3) documents assumptions before writing code. Should demonstrate the actual brepl workflow: require clojure.reflect, call r/reflect, filter by method type, map over :name or :signature.",
-      "files": []
     }
   ]
 }
