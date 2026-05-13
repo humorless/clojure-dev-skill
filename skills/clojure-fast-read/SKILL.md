@@ -46,3 +46,39 @@ Clojure is structural. Avoid `sed` or full-file reads for inspecting specific sy
 ;; Check what the JVM is actually running right now
 (clojure.repl/source-fn 'my.app/my-func)
 ```
+
+## New Multi-Mode Usage
+
+### Symbol Lookup
+
+```bash
+# Find and extract a specific symbol
+./scripts/clj-lens.bb --symbol app.db/update-user
+# Output: JSON with file, line, and complete function definition
+```
+
+### Find Symbols by Pattern
+
+```bash
+# Search for all definitions containing "update"
+./scripts/clj-lens.bb --find "update"
+# Output: JSON with array of matching symbols and locations
+```
+
+### Extract Error Context
+
+```bash
+# Show source code at the last exception location (requires nREPL)
+./scripts/clj-lens.bb --last-error
+# Output: JSON with exception type, location, and source form
+```
+
+### Parse Stacktraces
+
+```bash
+# Extract code from each frame in a stacktrace
+./scripts/clj-lens.bb --trace "java.lang.NullPointerException
+	at app.core\$func (core.clj:42)
+	at app.ui\$render (ui.clj:88)"
+# Output: JSON with enriched frames including source code
+```
