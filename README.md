@@ -18,23 +18,23 @@ A collection of specialized Claude Code skills that help AI agents write, debug,
 
 ## Available Skills
 
-### clojure-discovery
+### clj-discover
 Automatically explore and gather context when writing Clojure code that uses unfamiliar APIs. This skill:
 
 - Looks up documentation and source for Clojure functions and macros via `brepl`
 - Searches for Clojure wrapper libraries before falling back to Java classes
 - Prevents bugs by gathering sufficient API context before implementation
 
-Use `/clojure-discovery` when encountering unfamiliar Clojure functions, macros, Java classes, or any API you're not completely confident about.
+Use `/clj-discover` when encountering unfamiliar Clojure functions, macros, Java classes, or any API you're not completely confident about.
 
-### clojure-repl-debugging
+### clj-debug
 Debug Clojure code without modifying source files. This skill:
 
 - Uses the REPL for inline inspection of values
 - Traces execution and tests hypotheses without adding logging
 - Integrates with `brepl` for efficient debugging
 
-Use `/clojure-repl-debugging` when encountering bugs, test failures, or unexpected behavior. Load this **before** adding log statements or modifying code for debugging purposes.
+Use `/clj-debug` when encountering bugs, test failures, or unexpected behavior. Load this **before** adding log statements or modifying code for debugging purposes.
 
 ### clj-lens
 Multi-mode structural code reader for efficient Clojure inspection. This skill provides:
@@ -49,15 +49,15 @@ All modes return structured JSON for programmatic consumption, reducing token us
 
 Use `/clj-lens` whenever you need to locate or understand Clojure code — avoid inefficient `grep`/`sed`/file-reading patterns. Integrates with clj-kondo (static analysis) and nREPL (runtime inspection) with graceful fallback.
 
-### refactor-pm
+### clj-refactor
 Identify and improve code design by separating mechanism from policy. This skill:
 
 - Scans files for opportunities to separate concerns
 - Suggests refactoring patterns that improve maintainability
 
-Use `/refactor-pm` to review code for design improvements.
+Use `/clj-refactor` to review code for design improvements.
 
-### clj-skill-create-eval
+### clj-skill-eval
 Evaluate Clojure skills through rigorous real-project testing. This skill:
 
 - Creates isolated test projects using Clojure Stack Lite (with/without skills)
@@ -67,7 +67,7 @@ Evaluate Clojure skills through rigorous real-project testing. This skill:
 - Analyzes context-logs to identify actual behavior changes vs hypothetical improvements
 - Provides structured evaluation reports with quantitative and qualitative metrics
 
-Use `/clj-skill-create-eval` when you've created or modified a Clojure skill and want to validate its effectiveness through real-world testing. This prevents vague evaluations and ensures skills actually improve development outcomes.
+Use `/clj-skill-eval` when you've created or modified a Clojure skill and want to validate its effectiveness through real-world testing. This prevents vague evaluations and ensures skills actually improve development outcomes.
 
 ## Installation
 
@@ -77,7 +77,7 @@ Install via npx:
 npx skills install humorless/clj-native-agent
 ```
 
-This installs all five skills: `clojure-discovery`, `clojure-repl-debugging`, `clj-lens`, `refactor-pm`, and `clj-skill-create-eval`.
+This installs all five skills: `clj-discover`, `clj-debug`, `clj-lens`, `clj-refactor`, and `clj-skill-eval`.
 
 ## Quick Start
 
@@ -113,18 +113,18 @@ In Claude Code:
 
 ```
 /clj-lens --symbol app.db/update-user     # Find a symbol definition
-/clojure-discovery                         # Understand unfamiliar APIs
-/clojure-repl-debugging                    # Debug without modifying code
-/refactor-pm                               # Improve code design
+/clj-discover                              # Understand unfamiliar APIs
+/clj-debug                                 # Debug without modifying code
+/clj-refactor                              # Improve code design
 ```
 
 ## How They Work Together
 
 **Typical workflow:**
 1. Use `/clj-lens` to locate and extract code precisely
-2. Use `/clojure-discovery` to understand unfamiliar dependencies
-3. Use `/clojure-repl-debugging` if behavior doesn't match expectations
-4. Use `/refactor-pm` to improve design during refactoring
+2. Use `/clj-discover` to understand unfamiliar dependencies
+3. Use `/clj-debug` if behavior doesn't match expectations
+4. Use `/clj-refactor` to improve design during refactoring
 
 ## Architecture Notes
 
