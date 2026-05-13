@@ -38,7 +38,7 @@ The evaluation method:
 - **Concrete requirements** - Clear success criteria, not ambiguous specs
 - **Medium complexity** - Enough to showcase skill value, not trivial (5-15 min per version)
 - **Type diversity** - Different task types reveal different skill strengths:
-  - **Discovery task**: "Implement feature using unfamiliar library/API" (tests clojure-fast-read, clojure-discovery)
+  - **Discovery task**: "Implement feature using unfamiliar library/API" (tests clj-lens, clojure-discovery)
   - **Debugging task**: "Fix a bug in existing system" (tests clojure-repl-debugging)
   - **Exploration task**: "Understand and modify macro behavior" (tests clojure-discovery)
   - **Integration task**: "Use Java library via interop" (tests clojure-discovery)
@@ -159,7 +159,7 @@ Execute this task in /path/to/my-test-with-skill:
 5. Use these Clojure skills as they become relevant:
    - clojure-discovery (understanding APIs, Java interop, macros)
    - clojure-repl-debugging (interactive debugging via brepl)
-   - clojure-fast-read (understanding unfamiliar functions)
+   - clj-lens (understanding unfamiliar functions)
 
 Focus: Complete the task with skill guidance.
 ```
@@ -275,7 +275,7 @@ One sentence: Did the skill improve development outcomes?
 If skill effectiveness is unclear:
 
 1. **Design a task better suited to the skill**
-   - If clojure-fast-read wasn't triggered: add a task requiring exploration of unfamiliar functions
+   - If clj-lens wasn't triggered: add a task requiring exploration of unfamiliar functions
    - If clojure-repl-debugging wasn't used: add a task requiring interactive debugging
 
 2. **Run evaluation again** with the new task
@@ -306,7 +306,7 @@ If skill effectiveness is unclear:
 
 Use these to design varied evaluation tasks:
 
-### 1. Discovery Task (triggers clojure-fast-read, clojure-discovery)
+### 1. Discovery Task (triggers clj-lens, clojure-discovery)
 "Implement feature using unfamiliar library"
 - Example: "Add JWT authentication using auth0 library"
 - Skill value: Helps navigate unfamiliar API without trial-and-error

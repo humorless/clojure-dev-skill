@@ -89,7 +89,7 @@ For full functionality, install these optional tools:
 # Install clj-kondo for static analysis (enables --symbol and --find modes)
 npm install -g clj-kondo
 
-# Install brepl for REPL interaction (enables /clojure-repl-debugging and --last-error mode)
+# Install brepl for REPL interaction (enables /clj-debug and --last-error mode)
 npm install -g brepl
 ```
 

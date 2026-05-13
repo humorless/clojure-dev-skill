@@ -789,13 +789,13 @@ git commit -m "test: add integration tests for all clj-lens modes"
 ## Task 9: Documentation & Final Verification
 
 **Files:**
-- Modify: `skills/clojure-fast-read/SKILL.md` (add examples for new modes)
+- Modify: `skills/clj-lens/SKILL.md` (add examples for new modes)
 
 **Context:** Update documentation to show usage examples for all 5 modes.
 
 - [ ] **Step 1: Update SKILL.md with new modes**
 
-Add this section to `skills/clojure-fast-read/SKILL.md` after the existing "Implementation Examples":
+Add this section to `skills/clj-lens/SKILL.md` after the existing "Implementation Examples":
 
 ```markdown
 ## New Multi-Mode Usage
@@ -870,7 +870,7 @@ Expected: All valid JSON
 - [ ] **Step 4: Commit documentation updates**
 
 ```bash
-git add skills/clojure-fast-read/SKILL.md
+git add skills/clj-lens/SKILL.md
 git commit -m "docs: add examples for new clj-lens multi-mode features"
 ```
 
@@ -882,7 +882,7 @@ git commit -m "docs: add examples for new clj-lens multi-mode features"
 |------|--------|--------|
 | `scripts/clj-lens.bb` | Complete rewrite: 5 modes, JSON output, clj-kondo/nREPL integration | Core feature delivery |
 | `tests/clj-lens_test.clj` | New integration tests for all modes | Verify functionality |
-| `skills/clojure-fast-read/SKILL.md` | Added usage examples for new modes | Document for users |
+| `skills/clj-lens/SKILL.md` | Added usage examples for new modes | Document for users |
 
 ---
 

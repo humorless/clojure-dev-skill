@@ -4,13 +4,13 @@
 
 (defn run-clj-lens [& args]
   "Run clj-lens.bb and parse JSON output"
-  (let [result (apply shell/sh "bb" "skills/clojure-fast-read/scripts/clj-lens.bb" args)]
+  (let [result (apply shell/sh "bb" "skills/clj-lens/scripts/clj-lens.bb" args)]
     (if (zero? (:exit result))
       (json/parse-string (:out result) true)
       {:status "error" :error "exit-code" :exit (:exit result)})))
 
 (t/deftest test-coordinate-mode
-  (let [response (run-clj-lens "skills/clojure-fast-read/scripts/clj-lens.bb" "1")]
+  (let [response (run-clj-lens "skills/clj-lens/scripts/clj-lens.bb" "1")]
     (t/is (or (= (:status response) "ok")
               (= (:status response) "error")))
     (if (= (:status response) "ok")
