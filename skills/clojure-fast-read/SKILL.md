@@ -1,71 +1,48 @@
 ---
 name: clojure-fast-read
-description: Smart Clojure code reading strategy. Use this whenever you need to inspect a Clojure symbol, function, or definition - whether to understand runtime state, debug a recent change, or explore source code. This skill helps you choose between fast REPL queries (source-fn, doc, meta) vs file reading, and decide whether to inspect runtime or source. Speeds up code navigation by avoiding unnecessary full-file reads when targeted REPL inspection is faster.
+description: Structural Clojure code reading. Use this to get the exact code of a symbol using either REPL (source-fn) for runtime state or clj-lens for precise file source.
 ---
 
 # Clojure Fast Read
 
-When reading Clojure code, you have two strategies with different tradeoffs:
+Clojure is structural. Avoid `sed` or full-file reads for inspecting specific symbols. Instead, use these two "Precision Lenses":
 
-1. **Full file read** - slower but gives complete context (imports, functions, patterns)
-2. **REPL inspection** - fast, focused, but requires knowing the symbol name
+## 1. The Runtime Lens (`source-fn`)
+**When to use:** 
+- Verifying if a change was successfully evaluated into the REPL.
+- Debugging behavior in the current running system.
+- **Tool:** `(clojure.repl/source-fn 'ns/name)` via REPL tools (e.g., `brepl` or `clj-nrepl-eval`).
 
-This skill helps you choose the right approach.
+## 2. The Source Lens (`clj-lens`)
+**When to use:** 
+- Preparing to edit a function (need exact file content for search/replace blocks).
+- Reading code that hasn't been evaluated yet or exists only on disk.
+- **Tool:** `./scripts/clj-lens.bb <file> <line>` (uses rewrite-clj to extract the full S-expression).
 
-## Decision Framework
+---
 
-**Did you just change this code or are you debugging runtime behavior?** → Use REPL inspection
+## Decision Logic
 
-**Are you exploring a new codebase or trying to understand design?** → Read the file
+| Goal | Action |
+| :--- | :--- |
+| **I need to modify this code** | Get location via `(meta #'ns/name)`, then use **`clj-lens`** to get the perfect edit target. |
+| **I just edited/evaled this code** | Use **`source-fn`** to confirm the REPL runtime state matches your edit. |
+| **I'm lost in a long file** | Use **`clj-lens`** at the symbol's start line to isolate only that function's scope. |
 
-### Path A: Runtime State (Debug / Verify)
+## Implementation Examples
 
-Use REPL inspection when:
-- You just changed this code (verify edit took effect)
-- You're debugging why X behaves wrong (need actual behavior)
-
-**Has this symbol been evaluated in your current REPL session?**
-- **If YES:** Use `source-fn` to see runtime definition, `doc` for docstring, `meta` for file location
-- **If NO or UNSURE:** Check the file first; it's more authoritative for unevaluated symbols
-
-**Key insight:** Runtime can differ from source — only REPL inspection shows what's actually running.
-
-### Path B: Source Code (Exploration / Understanding)
-
-**If you know the symbol name + namespace:**
+### Precise Source Reading
 ```bash
-(meta #'your.namespace/function-name)
-; Get file location, then use sed to extract context
-sed -n '45,60p' src/my/app/core.clj
+# 1. Get metadata (from REPL)
+# (meta #'my.app/my-func) -> {:file "src/my/app.clj" :line 42}
+
+# 2. Get the full, structural S-expression from disk
+./scripts/clj-lens.bb src/my/app.clj 42
 ```
 
-Otherwise, read the whole file.
+### Runtime Verification
 
-## Implementation: Which Tool?
-
-Both **brepl** and **clj-nrepl-eval** work. Choose whichever is already set up:
-
-### Using brepl
-```clojure
-brepl <<'EOF'
-(require '[clojure.repl :refer [source-fn doc meta]])
-(source-fn 'your.namespace/function-name)
-(doc your.namespace/function-name)
-(meta #'your.namespace/function-name)
-EOF
 ```
-
-### Using clj-nrepl-eval
-```bash
-clj-nrepl-eval '(source-fn (quote your.namespace/function-name))'
-clj-nrepl-eval '(doc your.namespace/function-name)'
+;; Check what the JVM is actually running right now
+(clojure.repl/source-fn 'my.app/my-func)
 ```
-
-## Common Pattern: I Just Modified a Function
-
-**Goal:** Verify my change took effect  
-**Action:** 
-1. Reload the namespace if needed
-2. Use `source-fn` to see the current runtime definition
-3. If it matches your change, you're done; if not, the old code is still loaded
-
