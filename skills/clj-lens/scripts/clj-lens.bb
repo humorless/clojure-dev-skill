@@ -95,21 +95,46 @@
   (query-nrepl "(when-let [e *e] (.toString e))"))
 
 ;; ============================================================================
-;; Mode: Coordinate (Existing Behavior, JSON-wrapped)
+;; Mode: Read (Coordinate with line + column precision)
 ;; ============================================================================
 
-(defn coordinate-mode [file line]
+(defn collect-at-position [zloc row col]
+  "Recursively collect all forms at row:col (returns list sorted by column)"
+  (let [candidates (atom [])]
+    (letfn [(visit [loc]
+              (let [node (z/node loc)
+                    node-row (-> node meta :row)
+                    node-col (-> node meta :col)]
+                (when (and node-row node-col
+                          (= node-row row)
+                          (>= node-col col))
+                  (swap! candidates conj [node-col loc])))
+              ;; Visit children
+              (when (z/down loc)
+                (visit (z/down loc)))
+              ;; Visit right siblings
+              (let [right (z/right loc)]
+                (when right
+                  (visit right))))]
+      (visit zloc)
+      ;; Return location with smallest column offset (most specific/innermost form)
+      (when (seq @candidates)
+        (second (first (sort-by first @candidates)))))))
+
+(defn read-mode [line col file]
   (try
     (let [zloc (z/of-file file)
           row (Integer/parseInt line)
-          match (z/find-depth-first zloc #(= (-> % z/node meta :row) row))]
+          column (Integer/parseInt col)
+          match (collect-at-position zloc row column)]
       (if match
-        (print-json (ok-response "coordinate"
+        (print-json (ok-response "read"
                                  {:file file
-                                  :line (Integer/parseInt line)
+                                  :line row
+                                  :column column
                                   :form (z/string match)}))
         (do (print-json (error-response "not-found"
-                                       (str "No form found at line " line)))
+                                       (str "No form found at line " line " column " col)))
             (System/exit 1))))
     (catch Exception e
       (print-json (error-response "read-error" (.getMessage e)))
@@ -285,13 +310,13 @@
   (cond
     (< (count args) 1)
     (do (print-json (error-response "invalid-args"
-                                   "Usage: clj-lens.bb [--symbol|--find|--last-error|--trace] <args...>"))
+                                   "Usage: clj-lens.bb [--read|--symbol|--find|--last-error|--trace] <args...>"))
         (System/exit 1))
 
-    ;; Coordinate mode: clj-lens.bb <file> <line>
-    (and (= (count args) 2)
-         (not (str/starts-with? (first args) "--")))
-    (coordinate-mode (first args) (second args))
+    ;; Read mode: clj-lens.bb --read <line> <column> <file>
+    (and (>= (count args) 4)
+         (= (first args) "--read"))
+    (read-mode (second args) (nth args 2) (nth args 3))
 
     ;; Symbol mode: clj-lens.bb --symbol <ns/name>
     (and (>= (count args) 2)

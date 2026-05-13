@@ -42,29 +42,35 @@ Return structured JSON
 
 ## Modes
 
-### 1. Coordinate Read (Existing, JSON-wrapped)
+### 1. Read (Coordinate with line + column precision)
 
-**Purpose**: Extract the full, balanced S-expression at a specific line.
+**Purpose**: Extract the full, balanced S-expression at a specific line:column position.
 
-**Usage**: `clj-lens.bb <file> <line>`
+**Usage**: `clj-lens.bb --read <line> <column> <file>`
 
 **Example**:
 ```bash
-clj-lens.bb src/core.clj 42
+clj-lens.bb --read 42 5 src/core.clj
 ```
 
 **Output** (success):
 ```json
 {
   "status": "ok",
-  "mode": "coordinate",
+  "mode": "read",
   "data": {
     "file": "src/core.clj",
     "line": 42,
+    "column": 5,
     "form": "(defn get-name [user] (:name user))"
   }
 }
 ```
+
+**Notes**:
+- Column number (0-indexed or 1-indexed) determines which form is returned when multiple forms exist on the same line
+- Smaller column numbers may match outer forms, larger column numbers match inner forms
+- This is a structural enhancement over simple line-based extraction (like `sed`), since it understands bracket matching
 
 ### 2. Symbol Lookup
 

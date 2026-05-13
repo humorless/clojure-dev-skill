@@ -9,12 +9,11 @@
       (json/parse-string (:out result) true)
       {:status "error" :error "exit-code" :exit (:exit result)})))
 
-(t/deftest test-coordinate-mode
-  (let [response (run-clj-lens "skills/clj-lens/scripts/clj-lens.bb" "1")]
-    (t/is (or (= (:status response) "ok")
-              (= (:status response) "error")))
-    (if (= (:status response) "ok")
-      (t/is (= (:mode response) "coordinate")))))
+(t/deftest test-read-mode
+  (let [response (run-clj-lens "--read" "3" "1" "skills/clj-lens/scripts/clj-lens.bb")]
+    (t/is (= (:status response) "ok"))
+    (t/is (= (:mode response) "read"))
+    (t/is (contains? (:data response) :form))))
 
 (t/deftest test-symbol-mode-error
   (let [response (run-clj-lens "--symbol" "fake.ns/fake")]
