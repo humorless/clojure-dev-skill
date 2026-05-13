@@ -194,12 +194,12 @@
   {:suspect "unknown" :reason "manual-inspection-needed"})
 
 (defn last-error-mode []
-  (let [port (find-nrepl-port)]
-    (if-not port
-      (do (print-json (error-response "nrepl-unavailable"
-                                     "nREPL server not found. Start with: clj -M:nrepl or bb nrepl-server 1667"))
-          (System/exit 1))
-      (try
+  (try
+    (let [port (find-nrepl-port)]
+      (if-not port
+        (do (print-json (error-response "nrepl-unavailable"
+                                       "nREPL server not found. Start with: clj -M:nrepl or bb nrepl-server 1667"))
+            (System/exit 1))
         (let [exc-str (get-last-exception)]
           (if-not exc-str
             (do (print-json (error-response "no-exception" "No exception in *e"))
@@ -226,10 +226,10 @@
                             (System/exit 1))))
                     (catch Exception e
                       (do (print-json (error-response "read-error" (.getMessage e)))
-                          (System/exit 1)))))))))
-        (catch Exception e
-          (do (print-json (error-response "nrepl-error" (.getMessage e)))
-              (System/exit 1))))))))
+                          (System/exit 1)))))))))))
+    (catch Exception e
+      (do (print-json (error-response "nrepl-error" (.getMessage e)))
+          (System/exit 1)))))
 
 ;; ============================================================================
 ;; Mode: Trace (Task 7)
