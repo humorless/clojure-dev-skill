@@ -47,7 +47,7 @@ Multi-mode structural code reader for efficient Clojure inspection. This skill p
 
 Read mode returns raw code; other modes return structured JSON for programmatic consumption. All reduce token usage compared to full-file reads.
 
-Use `/clj-lens` whenever you need to locate or understand Clojure code — avoid inefficient `grep`/`sed`/file-reading patterns. Integrates with clj-kondo (static analysis) and nREPL (runtime inspection) with graceful fallback.
+Use `/clj-lens` to locate and extract Clojure code with structural precision — better than `grep`/`sed` for form-level extraction and symbol lookups. Complements standard text tools by understanding code structure. Integrates with clj-kondo (static analysis) and nREPL (runtime inspection) with graceful fallback.
 
 ### clj-refactor
 Identify and improve code design by separating mechanism from policy. This skill:
