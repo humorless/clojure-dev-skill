@@ -1,0 +1,17 @@
+{
+  "skill_name": "clj-replace",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I wrote a compact single-line Clojure handler and ran `cljfmt fix`. The formatter aggressively expanded the code, shifting indentation and splitting the map literal across multiple lines. Now I need to rename the parameter `req` to `request`, but my str_replace tool can't find a match — the whitespace in the file no longer matches what I wrote. How do I rename the parameter?",
+      "expected_output": "Should recognize that cljfmt changed the textual layout while the S-expression structure remained the same. Should invoke clj-replace via `bb /path/to/clj-replace.bb <file> \"req\" \"request\"` instead of attempting to construct a whitespace-sensitive str_replace match. Should explain why structural replacement is format-agnostic and how clj-replace compares S-expressions ignoring whitespace.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "I ran cljfmt on my Clojure project and now my editor's find-and-replace can't locate the old function form because the indentation changed. I need to rename the local binding `data` to `parsed-data` inside a let block. The code was originally on one line but is now spread over several lines with deep indentation.",
+      "expected_output": "Should use clj-replace with \"data\" → \"parsed-data\" as old/new strings, bypassing the need to match exact whitespace. Should explain that clj-replace compares S-expressions via `sexpr` equality so indentation and line breaks are irrelevant. If there are multiple occurrences (the binding plus references in the body), should explain ambiguity detection (exit code 3) and how to narrow the old-string to be more specific.",
+      "files": []
+    }
+  ]
+}
