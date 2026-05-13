@@ -58,7 +58,7 @@ Use `/clj-skill-create-eval` when you've created or modified a Clojure skill and
 Install via npx:
 
 ```bash
-npx skills install humorless/clojure-dev
+npx skills install humorless/clj-native-agent
 ```
 
 This installs all five skills: `clojure-discovery`, `clojure-repl-debugging`, `clojure-fast-read`, `refactor-pm`, and `clj-skill-create-eval`.
