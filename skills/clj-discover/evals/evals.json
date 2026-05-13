@@ -3,20 +3,20 @@
   "evals": [
     {
       "id": 0,
-      "prompt": "我需要在 Clojure 中使用 java.time.LocalDateTime 来处理时间。我需要创建一个函数，获取当前时间，并格式化为字符串。",
-      "expected_output": "Claude should ask about Clojure wrappers, search for clj-time, evaluate the wrapper, and either use the wrapper or explore java.time.LocalDateTime via brepl reflection to write accurate code.",
+      "prompt": "I need to work with java.time.LocalDateTime in Clojure to handle dates and times. I want to create a function that gets the current time and formats it as a string. How do I use this Java class correctly?",
+      "expected_output": "Should recognize that exploring a Java class without context is risky (may use overly verbose APIs or incorrect patterns). Should instead search for Clojure wrapper libraries first (e.g., clj-time or tick) to understand available options. Should explain why wrappers matter: (1) Clojure wrappers provide idiomatic APIs, (2) they prevent common Java interop mistakes, (3) they document best practices. If a wrapper doesn't fit, should then use brepl to explore java.time.LocalDateTime via clojure.reflect to see available methods (now, of, format) and demonstrate how to call them correctly.",
       "files": []
     },
     {
       "id": 1,
-      "prompt": "我需要用 Clojure 的 reduce 函数来累计计算一个列表中所有数字的总和。",
-      "expected_output": "Claude should use brepl to explore reduce's documentation, arglists, and possibly source code. Then write correct reduce expression with proper accumulator and function.",
+      "prompt": "I'm looking at code that uses defprotocol and reify, but I don't understand how they work together. What does reify actually expand to? Can you show me what the generated code looks like?",
+      "expected_output": "Should recognize that understanding macro behavior requires expanding the macro to see generated code. Should not try to explain from memory. Instead, should use brepl to call (macroexpand '(reify ...)) and show the actual generated code. Should explain what the expansion reveals: (1) reify creates an inline instance of the protocol, (2) it generates a concrete class with the specified method implementations, (3) the expansion shows method names and signatures clearly. Should clarify when to use reify (inline instances) vs defrecord/deftype (named types).",
       "files": []
     },
     {
       "id": 2,
-      "prompt": "我在代码中看到一个 defrecord 宏，但不确定它具体做了什么。能帮我理解吗？",
-      "expected_output": "Claude should use brepl to macroexpand defrecord, explain the generated code, and clarify when to use defrecord vs deftype vs reify.",
+      "prompt": "I'm about to write some code that uses Java reflection on an unfamiliar class, but I'm not sure what methods are available. What's the safest way to explore this?",
+      "expected_output": "Should recognize that blindly guessing Java method names leads to bugs (wrong method signatures, missing overloads, incorrect assumptions). Should instead use brepl with clojure.reflect to systematically explore: (1) list all public methods via (r/reflect JavaClass), (2) check method signatures and arglists, (3) verify return types. Should explain why reflection matters: (1) prevents method-not-found errors, (2) clarifies which overload to use, (3) documents assumptions before writing code. Should demonstrate the actual brepl workflow: require clojure.reflect, call r/reflect, filter by method type, map over :name or :signature.",
       "files": []
     }
   ]
