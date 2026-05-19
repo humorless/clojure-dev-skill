@@ -1,6 +1,6 @@
 ---
 name: clj-replace
-description: Structural Clojure code replacement based on S-expression equivalence, ignoring formatting differences
+description: Use when replacing Clojure or Babashka code but str_replace fails due to formatting differences - compares S-expression structure instead
 ---
 
 # clj-replace: Structural Clojure Code Replacement
